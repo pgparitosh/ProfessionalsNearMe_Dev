@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ScrollView } from 'react-native';
-import { Surface, Avatar, Card, Title, Paragraph, List, Colors } from 'react-native-paper';
+import { Surface, Avatar, Card, Title, Paragraph, List } from 'react-native-paper';
 import HeaderComponent from '../components/HeaderComponent.js';
 import GlobalStyles from '../styles/GlobalStyles.js';
 import ProfileScreenStyles from '../styles/ProfileScreen.Styles.js';
@@ -19,7 +19,7 @@ export default class ProfileScreen extends React.Component {
                         size={150}
                         source={require('../../assets/images/Profile/myavatar.png')}
                         style={ProfileScreenStyles.avatarImage} />
-                    <Card style={ProfileScreenStyles.card}>
+                    <Card style={GlobalStyles.card}>
                         <Card.Content>
                             <Title>John Doe</Title>
                             <Paragraph>
@@ -32,7 +32,7 @@ export default class ProfileScreen extends React.Component {
                         </Paragraph>
                         </Card.Content>
                     </Card>
-                    <Card style={ProfileScreenStyles.card}>
+                    <Card style={GlobalStyles.card}>
                         <Card.Content>
                             <Title>Contact Details</Title>
                             <List.Item style={ProfileScreenStyles.listItem}
@@ -43,7 +43,7 @@ export default class ProfileScreen extends React.Component {
                                 left={() => <List.Icon icon="email" />} />
                         </Card.Content>
                     </Card>
-                    <Card style={[ProfileScreenStyles.card, ProfileScreenStyles.lastCard]}>
+                    <Card style={[GlobalStyles.card, ProfileScreenStyles.lastCard]}>
                         <Card.Content>
                             <Title>Portfolio</Title>
                             <List.Item style={ProfileScreenStyles.listItem}

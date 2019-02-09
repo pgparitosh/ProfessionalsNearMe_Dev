@@ -4,12 +4,6 @@ export default {
         alignSelf: 'center',
         marginBottom: 10
     },
-    card: {
-        marginTop: 15,
-        marginLeft: 5,
-        marginRight: 5,
-        elevation: 4
-    },
     listItem: {
         margin: 0,
         marginTop: 10, 
