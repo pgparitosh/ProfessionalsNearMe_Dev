@@ -1,25 +1,34 @@
 import React from 'react';
 import { Platform, Alert } from 'react-native';
 import { Google, Facebook } from 'expo';
+import {
+    REACT_APP_GOOGLE_SIGN_IN_ANDROID_CLIENT_ID,
+    REACT_APP_GOOGLE_SIGN_IN_IOS_CLIENT_ID,
+    REACT_APP_FACEBOOK_SIGN_IN_APP_ID,
+} from 'react-native-dotenv';
 
 const LoginService = {
-
     // The below method is used to login using google
     async _logInWithGoogle() {
+
         const clientId = Platform.OS === 'ios' ?
-            '160018136023-jno0t1fl22ase1m6k4c1uphqk4837ad0.apps.googleusercontent.com' :
-            '160018136023-aaphaet1tgorvu2fbthbffr5da5ju8hb.apps.googleusercontent.com';
-        // const clientId = '160018136023-8hqbgv366jnhau1ob94tj61uacl8ddkm.apps.googleusercontent.com';
+            REACT_APP_GOOGLE_SIGN_IN_IOS_CLIENT_ID :
+            REACT_APP_GOOGLE_SIGN_IN_ANDROID_CLIENT_ID;
 
         const { type, accessToken, user } = await Google.logInAsync({ clientId });
-        console.log(type);
-        console.log(accessToken);
-        console.log(user);
+        if (type === 'success') {
+            console.log(accessToken);
+            console.log(user);
+        }
+        else {
+            console.log('User cancelled the action');
+        }
+
     },
 
     // The below method is used to log in using Facebook
     async _logInWithFacebook() {
-        const appId = '246814439536371';
+        const appId = REACT_APP_FACEBOOK_SIGN_IN_APP_ID;
         try {
             const {
                 type,
@@ -42,7 +51,7 @@ const LoginService = {
             alert(`Facebook Login Error: ${message}`);
         }
     }
-    
+
 }
 
 export default LoginService;

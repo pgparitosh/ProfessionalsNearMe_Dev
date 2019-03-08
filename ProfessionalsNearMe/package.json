@@ -20,7 +20,8 @@
     "react-navigation-material-bottom-tabs": "^1.0.0"
   },
   "devDependencies": {
-    "babel-preset-expo": "^5.0.0"
+    "babel-preset-expo": "^5.0.0",
+    "react-native-dotenv": "^0.2.0"
   },
   "private": true
 }

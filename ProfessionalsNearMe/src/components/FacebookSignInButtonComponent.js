@@ -30,7 +30,7 @@ export default class FacebookSignInButtonComponent extends React.Component {
                 style={LoginStyles.externalLoginButton}
                 icon={require('../../assets/icons/login-facebook-icon.png')}
                 mode="contained"
-                color={Colors.blue900}
+                color={Colors.indigoA700}
                 loading={this.state.loading}
                 disabled={this.state.loading}
             >
