@@ -1,6 +1,6 @@
 import React from 'react';
-import { ScrollView, View, KeyboardAvoidingView } from 'react-native';
-import { Button, Avatar, Text, Colors, Surface, TextInput } from 'react-native-paper';
+import { View } from 'react-native';
+import { Button, Text, Colors, TextInput } from 'react-native-paper';
 import LoginStyles from '../styles/Login.Styles';
 
 export default class SignInUsingEmailScreen extends React.Component {
@@ -9,10 +9,23 @@ export default class SignInUsingEmailScreen extends React.Component {
         super(props);
     }
 
+    _forgotPassword() {
+        // Code for forgot password
+        this.props.navigation.navigate('ForgotPassword');
+    }
+
+    _logIn() {
+        // code for log in
+    }
+
+    _cancel() {
+        // code for cancel
+    }
+
     render() {
         return (
-            <Surface style={LoginStyles.container}>
-                <KeyboardAvoidingView style={LoginStyles.signInContentContainer}>
+            <View style={LoginStyles.container}>
+                <View style={LoginStyles.signInContentContainer}>
                     <Text style={LoginStyles.appName}>
                         Login
                     </Text>
@@ -29,13 +42,22 @@ export default class SignInUsingEmailScreen extends React.Component {
                         secureTextEntry={true}
                         style={LoginStyles.inputFields}
                     />
+                    <View style={LoginStyles.forgotPasswordContainer}>
+                        <Button
+                            onPress={this._forgotPassword.bind(this)}
+                            mode="text">
+                            <Text style={LoginStyles.forgotPasswordText}>
+                                Forgot Password?
+                            </Text>
+                        </Button>
+                    </View>
                     <View style={LoginStyles.loginButtons}>
                         <Button
                             style={LoginStyles.loginPageButton}
                             icon="mail"
                             mode="contained"
-                            color={Colors.pink50}
-                            onPress={this.navigateToSignInScreen}
+                            color={Colors.violet900}
+                            onPress={this._logIn}
                         >
                             Sign In
                         </Button>
@@ -44,14 +66,13 @@ export default class SignInUsingEmailScreen extends React.Component {
                             icon="cancel"
                             mode="contained"
                             color={Colors.red500}
-                            onPress={this.navigateToSignInScreen}
+                            onPress={() => this.props.navigation.navigate('Login')}
                         >
                             Cancel
                         </Button>
                     </View>
-                </KeyboardAvoidingView>
-            </Surface>
-
+                </View>
+            </View>
         );
     }
 }

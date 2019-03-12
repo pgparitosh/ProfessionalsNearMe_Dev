@@ -11,14 +11,6 @@ export default class LoginScreen extends React.Component {
         super(props);
     }
 
-    navigateToSignInScreen() {
-        // Code to navigate to sign in screen
-    }
-
-    navigateToSignUpScreen() {
-        // Code to navigate to sign up screen
-    }
-
     render() {
         return (
             <ScrollView style={LoginStyles.container}>
@@ -42,7 +34,7 @@ export default class LoginScreen extends React.Component {
                         icon="mail"
                         mode="contained"
                         color={Colors.pink50}
-                        onPress={this.navigateToSignInScreen}
+                        onPress={() => this.props.navigation.navigate('SignInUsingEmail')}
                     >
                         Sign In using Email
                     </Button>
@@ -51,10 +43,10 @@ export default class LoginScreen extends React.Component {
                     </Text>
                     <Button
                         style={LoginStyles.externalLoginButton}
-                        icon="account-box"
+                        icon="person-add"
                         mode="contained"
-                        color={Colors.amber900}
-                        onPress={this.navigateToSignUpScreen}
+                        color={Colors.violet900}
+                        onPress={() => this.props.navigation.navigate('SignUpUsingEmail')}                        
                     >
                         Create account
                     </Button>
