@@ -1,12 +1,22 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Button, Text, Colors, TextInput } from 'react-native-paper';
+import { View, AsyncStorage } from 'react-native';
+import { Button, Text, Colors, TextInput, Snackbar } from 'react-native-paper';
 import LoginStyles from '../styles/Login.Styles';
+import LoginService from '../services/LoginService';
 
 export default class SignInUsingEmailScreen extends React.Component {
 
     constructor(props) {
         super(props);
+        this._logIn = this._logIn.bind(this);
+    }
+
+    state = {
+        resultMsg: '',
+        visible: false,
+        isLoading: false,
+        emailId: '',
+        pwd: '',
     }
 
     _forgotPassword() {
@@ -16,10 +26,51 @@ export default class SignInUsingEmailScreen extends React.Component {
 
     _logIn() {
         // code for log in
-    }
-
-    _cancel() {
-        // code for cancel
+        this.setState(state => ({
+            isLoading: true,
+        })
+        )
+        var emailAddress = this.state.emailId;
+        var password = this.state.pwd;
+        var msg = '';
+        if (emailAddress.trim() === '' || password.trim() === '') {
+            msg = 'All fields are mandatory'
+        }
+        else if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailAddress))) {
+            msg = 'Please enter a valid email address'
+        }
+        else {
+            var inputObj = {
+                json: {
+                    username: this.state.emailId,
+                    password: this.state.pwd,
+                }
+            };
+            LoginService.signInUsingEmail(JSON.stringify(inputObj))
+                .then((res) => {
+                    console.log(res);
+                    let status = res.status;
+                    console.log(status);
+                    if (status) {
+                        let apiKey = res.api_key;
+                        AsyncStorage.setItem('userToken', apiKey)
+                            .then(() => {
+                                const navigation = this.props.navigation.dangerouslyGetParent();
+                                const parentNav = navigation.dangerouslyGetParent();
+                                parentNav.navigate('AuthLoading');
+                            });
+                    }
+                    else {
+                        msg = res.message;
+                        this.setState(state => ({
+                            isLoading: false,
+                            resultMsg: msg,
+                            visible: true
+                        }));
+                    }
+                })
+                .catch((e) => console.log(e));
+        }
     }
 
     render() {
@@ -34,6 +85,8 @@ export default class SignInUsingEmailScreen extends React.Component {
                         mode='flat'
                         placeholder='Enter your registered Email Address'
                         style={LoginStyles.inputFields}
+                        value={this.state.emailId}
+                        onChangeText={(emailId) => this.setState({ emailId })}
                     />
                     <TextInput
                         label='Password'
@@ -41,6 +94,8 @@ export default class SignInUsingEmailScreen extends React.Component {
                         placeholder='Enter your password'
                         secureTextEntry={true}
                         style={LoginStyles.inputFields}
+                        value={this.state.pwd}
+                        onChangeText={(pwd) => this.setState({ pwd })}
                     />
                     <View style={LoginStyles.forgotPasswordContainer}>
                         <Button
@@ -57,7 +112,7 @@ export default class SignInUsingEmailScreen extends React.Component {
                             icon="mail"
                             mode="contained"
                             color={Colors.violet900}
-                            onPress={this._logIn}
+                            onPress={this._logIn.bind(this)}
                         >
                             Sign In
                         </Button>
@@ -72,6 +127,19 @@ export default class SignInUsingEmailScreen extends React.Component {
                         </Button>
                     </View>
                 </View>
+                <Snackbar
+                    visible={this.state.visible}
+                    onDismiss={() => this.setState({ visible: false })}
+                    duration={10000}
+                    action={{
+                        label: 'Ok',
+                        onPress: () => {
+                            this.setState({ visible: false })
+                        },
+                    }}
+                >
+                    {this.state.resultMsg}
+                </Snackbar>
             </View>
         );
     }

@@ -1,59 +1,95 @@
 import * as React from 'react';
-import { ScrollView } from 'react-native';
-import { Surface, Avatar, Card, Title, Paragraph, List } from 'react-native-paper';
-import HeaderComponent from '../components/HeaderComponent.js';
+import { ScrollView, View } from 'react-native';
+import { Surface, Text, Appbar, Button } from 'react-native-paper';
 import GlobalStyles from '../styles/GlobalStyles.js';
 import ProfileScreenStyles from '../styles/ProfileScreen.Styles.js';
+import ViewBasicDetailsComponent from '../components/ViewBasicDetailsComponent.js';
+import ViewPersonalContactDetailsComponent from '../components/ViewPersonalContactDetailsComponent.js';
+import ViewBusinessDetailsComponent from '../components/ViewBusinessDetailsComponent.js';
+import ViewBusinessAddressDetailsComponent from '../components/ViewBusinessAddressDetailsComponent.js';
 
 export default class ProfileScreen extends React.Component {
     constructor(props) {
         super(props);
     }
 
+    userDetails = {
+        basicDetails: {
+            firstName: '',
+            lastName: '',
+            email: '',
+            phoneNo: '',
+            gender: '',
+            age: '',
+        },
+        businessAddressDetails: {
+            businessName: '',
+            businessPhone: '',
+            alternatePhone: '',
+            businessEmail: '',
+            addressLine1: '',
+            addressLine2: '',
+            addressLine3: '',
+            city: '',
+            state: '',
+            country: '',
+            pincode: '',
+        },
+        businessDetails: {
+            businessName: '',
+            businessPhone: '',
+            alternatePhone: '',
+            businessEmail: '',
+            category: '',
+            subCategory: '',
+            rate: '',
+            duration: '',
+            description: '',
+        },
+        portfolioDetails: {
+            images: null,
+        }
+    }
+
+    _editProfile() {
+        const navigation = this.props.navigation.dangerouslyGetParent();
+        navigation.navigate('SaveProfile', {
+             userDetails: this.userDetails,
+             caller: 'profile',
+        });
+    }
+
+    _showPortfolioImages() {
+        //console.log(this.props.navigation);
+        const navigation = this.props.navigation.dangerouslyGetParent();
+
+        navigation.navigate('ViewPortfolio', {
+             userDetails: this.userDetails,
+        });
+    }
+
     render() {
         return (
             <Surface style={GlobalStyles.surfaceContainer}>
                 <ScrollView>
-                    <HeaderComponent title="My Profile" subtitle="This is my profile" />
-                    <Avatar.Image
-                        size={150}
-                        source={require('../../assets/images/Profile/myavatar.png')}
-                        style={ProfileScreenStyles.avatarImage} />
-                    <Card style={GlobalStyles.card}>
-                        <Card.Content>
-                            <Title>John Doe</Title>
-                            <Paragraph>
-                                An aspirant photographer who loves to shoot the urban chaos.
-                                Happy to serve you.
-                                This is a short description about my bio.
-                                I have worked on multiple projects prior to this and have many
-                                success stories to share.
-                                Looking forward to work with you.
-                        </Paragraph>
-                        </Card.Content>
-                    </Card>
-                    <Card style={GlobalStyles.card}>
-                        <Card.Content>
-                            <Title>Contact Details</Title>
-                            <List.Item style={ProfileScreenStyles.listItem}
-                                title="+91 9090119091"
-                                left={() => <List.Icon icon="perm-phone-msg" />} />
-                            <List.Item style={ProfileScreenStyles.listItem}
-                                title="john.doe@pronearme.com"
-                                left={() => <List.Icon icon="email" />} />
-                        </Card.Content>
-                    </Card>
-                    <Card style={[GlobalStyles.card, ProfileScreenStyles.lastCard]}>
-                        <Card.Content>
-                            <Title>Portfolio</Title>
-                            <List.Item style={ProfileScreenStyles.listItem}
-                                title="Corporate Event"
-                                description="This project was at a corporate event held at Paris" />
-                            <List.Item style={ProfileScreenStyles.listItem}
-                                title="Celebrity Wedding Photoshoot"
-                                description="This project was at a celeb's wedding celebration" />
-                        </Card.Content>
-                    </Card>
+                    <Appbar.Header>
+                        <Appbar.Content
+                            title={"My Profile"}
+                        />
+                        <Appbar.Action
+                            icon="create"
+                            onPress={this._editProfile.bind(this)} />
+                    </Appbar.Header>
+                    <ViewBasicDetailsComponent userDetails={this.userDetails} />
+                    <ViewPersonalContactDetailsComponent userDetails={this.userDetails} />
+                    <ViewBusinessDetailsComponent userDetails={this.userDetails} />
+                    <ViewBusinessAddressDetailsComponent userDetails={this.userDetails} />
+                    <View style={{margin: 20}}>
+                        <Button mode="contained"
+                                onPress={this._showPortfolioImages.bind(this)}>
+                            View Portfolio Images
+                        </Button>
+                    </View>
                 </ScrollView>
             </Surface>
         );

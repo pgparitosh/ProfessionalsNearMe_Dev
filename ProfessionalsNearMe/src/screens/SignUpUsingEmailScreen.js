@@ -1,7 +1,8 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { Button, Text, Colors, TextInput, Snackbar } from 'react-native-paper';
 import LoginStyles from '../styles/Login.Styles';
+import LoginService from '../services/LoginService.js';
 
 export default class ForgotPasswordScreen extends React.Component {
     constructor(props) {
@@ -11,9 +12,12 @@ export default class ForgotPasswordScreen extends React.Component {
     state = {
         resultMsg: '',
         visible: false,
+        isLoading: false,
         emailId: '',
         pwd: '',
         confPwd: '',
+        firstName: '',
+        lastName: '',
     }
 
     _goBack() {
@@ -22,6 +26,10 @@ export default class ForgotPasswordScreen extends React.Component {
     }
 
     _signUp() {
+        this.setState(state => ({
+                isLoading: true,
+            })
+        )
         var emailAddress = this.state.emailId;
         var password = this.state.pwd;
         var confPassword = this.state.confPwd;
@@ -32,27 +40,68 @@ export default class ForgotPasswordScreen extends React.Component {
         else if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailAddress))) {
             msg = 'Please enter a valid email address'
         }
-        else if(password !== confPassword) {
+        else if (password !== confPassword) {
             msg = 'Password and confirm password do not match.';
         }
         else {
             // Make a service call
-            msg = 'A verification mail has been sent. Please check your mail box.'
+            var inputObj = {
+                json: {
+                    firstName: this.state.firstName,
+                    lastName: this.state.lastName,
+                    email: this.state.emailId,
+                    password: this.state.pwd,
+                    mobile: "9999999999"
+                }
+            };
+            console.log(JSON.stringify(inputObj));
+            // var result = LoginService.signUpUsingEmail(JSON.stringify(inputObj));
+            LoginService.signUpUsingEmail(inputObj)
+                        .then((res) => {
+                            console.log(res);
+                            this.props.navigation.navigate('AuthLoading');
+                        });
+            //msg = JSON.parse(result).message;
         }
         this.setState(state => ({
-            resultMsg: msg,
-            visible: true
-        })
+                isLoading: false,
+                resultMsg: msg,
+                visible: true
+            })
         );
     }
 
     render() {
+        if (this.state.isLoading) {
+            return (
+                <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}>
+                    <ActivityIndicator animating={true} size="large" color="#6f00f8" />
+                </View>
+            )
+        }
+
         return (
             <View style={LoginStyles.container}>
                 <View style={LoginStyles.signInContentContainer}>
                     <Text style={LoginStyles.appName}>
                         Sign Up
                     </Text>
+                    <TextInput
+                        label='First Name'
+                        mode='flat'
+                        placeholder='Enter your first name'
+                        style={LoginStyles.inputFields}
+                        value={this.state.firstName}
+                        onChangeText={(firstName) => this.setState({ firstName })}
+                    />
+                    <TextInput
+                        label='Last Name'
+                        mode='flat'
+                        placeholder='Enter your last name'
+                        style={LoginStyles.inputFields}
+                        value={this.state.lastName}
+                        onChangeText={(lastName) => this.setState({ lastName })}
+                    />
                     <TextInput
                         label='Email'
                         mode='flat'

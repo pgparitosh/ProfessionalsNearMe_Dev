@@ -1,10 +1,9 @@
 import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
-import LoginScreen from './LoginScreen';
-import SignInUsingEmailScreen from './SignInUsingEmailScreen';
-import ForgotPasswordScreen from './ForgotPasswordScreen';
-import SignUpUsingEmailScreen from './SignUpUsingEmailScreen';
-import RootNavigator from './RootNavigator';
+import LoginScreen from '../screens/LoginScreen';
+import SignInUsingEmailScreen from '../screens/SignInUsingEmailScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import SignUpUsingEmailScreen from '../screens/SignUpUsingEmailScreen';
 
 const LoginStackNavigatorConfiguration = createStackNavigator(
     {
@@ -12,7 +11,6 @@ const LoginStackNavigatorConfiguration = createStackNavigator(
         SignInUsingEmail: SignInUsingEmailScreen,
         ForgotPassword: ForgotPasswordScreen,
         SignUpUsingEmail: SignUpUsingEmailScreen,
-        RootNavigator: RootNavigator,
     },
     {
         headerMode: 'none'
