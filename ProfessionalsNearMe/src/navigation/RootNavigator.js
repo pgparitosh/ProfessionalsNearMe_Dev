@@ -13,7 +13,7 @@ export default class RootNavigation extends React.Component {
 
   _renderScene = BottomNavigation.SceneMap({
     profile: RenderConfig.ProfileRoute,
-    workHistory: RenderConfig.WorkHistoryRoute,
+    events: RenderConfig.EventsRoute,
     search: RenderConfig.SearchRoute,
     chat: RenderConfig.ChatRoute,
     settings: RenderConfig.SettingsRoute,

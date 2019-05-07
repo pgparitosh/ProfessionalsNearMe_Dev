@@ -89,7 +89,7 @@ export default class SaveProfileScreen extends React.Component {
     componentDidMount() {
         const { navigation } = this.props;
         //console.log('Navigation' + navigation);
-        if(navigation) {
+        if (navigation) {
             this.caller = navigation.getParam('caller');
         }
         let currentPos = this.state.currentPosition;
@@ -252,14 +252,14 @@ export default class SaveProfileScreen extends React.Component {
         return (
             <View style={ProfileScreenStyles.container}>
                 <Appbar.Header>
-                        <Appbar.Content
-                            title={this.caller === 'profile' ? "Save Profile" : "Create Profile"}
-                        />
-                        <Appbar.Action
-                            disabled={this.caller !== 'profile'}
-                            icon="close"
-                            onPress={this._cancel.bind(this)} />
-                    </Appbar.Header>
+                    <Appbar.Content
+                        title={this.caller === 'profile' ? "Save Profile" : "Create Profile"}
+                    />
+                    <Appbar.Action
+                        disabled={this.caller !== 'profile'}
+                        icon="close"
+                        onPress={this._cancel.bind(this)} />
+                </Appbar.Header>
                 <View style={ProfileScreenStyles.inputFields}>
                     <StepIndicator
                         customStyles={customStyles}
