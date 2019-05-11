@@ -69,6 +69,7 @@ export default class ProfileScreen extends React.Component {
     }
 
     render() {
+
         return (
             <Surface style={GlobalStyles.surfaceContainer}>
                 <ScrollView>
