@@ -6,7 +6,7 @@ import {
     Image,
     Text,
     Platform,
-    SafeAreaView
+    TouchableWithoutFeedback
 } from "react-native";
 import { Appbar, ActivityIndicator, Colors } from 'react-native-paper';
 import MapView from "react-native-maps";
@@ -137,7 +137,11 @@ export default class SearchScreen extends React.Component {
     }
 
     _filterSearch() {
-        this.props.navigation.navigate('SearchFilter', {returnData: this.returnData.bind(this)});
+        this.props.navigation.navigate('SearchFilter', { returnData: this.returnData.bind(this) });
+    }
+
+    _showProfile(property) {
+        this.props.navigation.navigate('ViewProfessional', { profileId: property.id });
     }
 
     render() {
@@ -226,95 +230,96 @@ export default class SearchScreen extends React.Component {
                     }}
                 >
                     {properties.map((property, index) => (
-                        <View
-                            key={property.id}
-                            style={{ width: CARD_WIDTH, marginHorizontal: 5 }}
-                        >
-                            <Image
-                                style={{
-                                    width: CARD_WIDTH,
-                                    height: CARD_HEIGHT
-                                }}
-                                source={{ uri: property.imageUrl }}
-                            />
-                            {selectedProperty === index && (
+                        <TouchableWithoutFeedback key={property.id} onPress={() => this._showProfile(property)}>
+                            <View
+                                style={{ width: CARD_WIDTH, marginHorizontal: 5 }}
+                            >
+                                <Image
+                                    style={{
+                                        width: CARD_WIDTH,
+                                        height: CARD_HEIGHT
+                                    }}
+                                    source={{ uri: property.imageUrl }}
+                                />
+                                {selectedProperty === index && (
+                                    <View
+                                        style={{
+                                            position: "absolute",
+                                            top: 0,
+                                            left: 0,
+                                            height: 4,
+                                            width: "100%",
+                                            backgroundColor: ACCENT_COLOUR
+                                        }}
+                                    />
+                                )}
                                 <View
                                     style={{
-                                        position: "absolute",
-                                        top: 0,
-                                        left: 0,
-                                        height: 4,
-                                        width: "100%",
-                                        backgroundColor: ACCENT_COLOUR
-                                    }}
-                                />
-                            )}
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    paddingTop: 4
-                                }}
-                            >
-                                <Text
-                                    style={{
-                                        fontSize: 9,
-                                        fontWeight: "bold"
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        paddingTop: 4
                                     }}
                                 >
-                                    {property.type.toUpperCase()}
-                                </Text>
+                                    <Text
+                                        style={{
+                                            fontSize: 9,
+                                            fontWeight: "bold"
+                                        }}
+                                    >
+                                        {property.type.toUpperCase()}
+                                    </Text>
 
+                                    <View
+                                        style={{
+                                            backgroundColor: "#555555",
+                                            height: 2,
+                                            width: 2,
+                                            borderRadius: 2,
+                                            marginHorizontal: 4
+                                        }}
+                                    />
+
+                                    <Text style={{ fontSize: 9, fontWeight: "bold" }}>
+                                        {property.subCategory}
+                                    </Text>
+                                </View>
+                                <Text
+                                    style={{ fontSize: 15, fontWeight: "bold", marginBottom: 4 }}
+                                >
+                                    {property.title}
+                                </Text>
+                                <Text style={{ fontSize: 12, fontWeight: "100" }}>
+                                    {property.price} per {property.duration}
+                                </Text>
                                 <View
                                     style={{
-                                        backgroundColor: "#555555",
-                                        height: 2,
-                                        width: 2,
-                                        borderRadius: 2,
-                                        marginHorizontal: 4
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        paddingTop: 4
                                     }}
-                                />
-
-                                <Text style={{ fontSize: 9, fontWeight: "bold" }}>
-                                    {property.subCategory}
-                                </Text>
+                                >
+                                    {Array(5)
+                                        .fill(0)
+                                        .map((_, index) => (
+                                            <Icon
+                                                key={index}
+                                                color={ACCENT_COLOUR}
+                                                name={
+                                                    index < property.rating
+                                                        ? Platform.OS === "ios" ? "ios-star" : "md-star"
+                                                        : Platform.OS === "ios"
+                                                            ? "ios-star-outline"
+                                                            : "md-star-outline"
+                                                }
+                                                size={14}
+                                            />
+                                        ))}
+                                    <Text style={{ fontSize: 12, marginLeft: 4 }}>
+                                        {property.reviewsCount}
+                                    </Text>
+                                </View>
                             </View>
-                            <Text
-                                style={{ fontSize: 15, fontWeight: "bold", marginBottom: 4 }}
-                            >
-                                {property.title}
-                            </Text>
-                            <Text style={{ fontSize: 12, fontWeight: "100" }}>
-                                {property.price} per {property.duration}
-                            </Text>
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    paddingTop: 4
-                                }}
-                            >
-                                {Array(5)
-                                    .fill(0)
-                                    .map((_, index) => (
-                                        <Icon
-                                            key={index}
-                                            color={ACCENT_COLOUR}
-                                            name={
-                                                index < property.rating
-                                                    ? Platform.OS === "ios" ? "ios-star" : "md-star"
-                                                    : Platform.OS === "ios"
-                                                        ? "ios-star-outline"
-                                                        : "md-star-outline"
-                                            }
-                                            size={14}
-                                        />
-                                    ))}
-                                <Text style={{ fontSize: 12, marginLeft: 4 }}>
-                                    {property.reviewsCount}
-                                </Text>
-                            </View>
-                        </View>
+                        </TouchableWithoutFeedback>
                     ))}
                 </ScrollView>
             </View>
