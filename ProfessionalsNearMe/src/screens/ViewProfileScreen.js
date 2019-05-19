@@ -89,9 +89,9 @@ export default class ProfileScreen extends React.Component {
 
     _payMoney() {
         const transactionId = "transactionId";
-        const message = `message`;
-        const payTo = "9425437800@upi";
-        const payName = "Name";
+        const message = `dummy transaction`;
+        const payTo = "7405423686@upi";
+        const payName = "John Doe";
         const amount = 1;
         let url = `upi://pay?pa=${payTo}&pn=${payName}&tr=${transactionId}&tn=${message}&am=${amount}`;
         this.setState({ paymentPopupVisible: false });

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ProfessionalsNearMe",
-    "slug": "ProfessionalsNearMe",
+    "name": "Expert Link",
+    "slug": "ExpertLink",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -24,6 +24,9 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.expertlink.expertlink"
     }
   }
 }

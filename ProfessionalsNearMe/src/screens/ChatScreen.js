@@ -64,7 +64,7 @@ export default class ChatScreen extends React.Component {
                                         title={chatData.name}
                                         description={chatData.lastMsg}
                                         left={props => <Avatar.Image size={40} style={ChatAppStyles.listItemAvatar} source={require('../../assets/images/Profile/myavatar.png')} />}
-                                        onPress={() => this.props.navigation.navigate('ChatDetails', {
+                                        onPress={() => this.props.navigation.navigate('GiftedChat', {
                                             listId: chatData.listId,
                                             name: chatData.name
                                         })}
