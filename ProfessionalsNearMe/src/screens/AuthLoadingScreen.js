@@ -17,13 +17,18 @@ export default class AuthLoadingScreen extends React.Component {
         // AsyncStorage.removeItem('userToken');
         // AsyncStorage.removeItem('userProfileId');
         const userToken = await AsyncStorage.getItem('userToken');
+        const userProfileId = await AsyncStorage.getItem('userProfileId');
+        console.log(userProfileId);
         console.log('user token: ' + userToken);
-        this.props.navigation.navigate(
-            userToken !== undefined && userToken !== null ? 'ProfileSwitchNavigator' : 'Auth'
-        );
-
-        // This will switch to the App screen or Auth screen and this loading
-        // screen will be unmounted and thrown away.
+        if (userToken === undefined || userToken === null) {
+            this.props.navigation.navigate('Auth');
+        }
+        else if (userProfileId === undefined || userProfileId === null) {
+            this.props.navigation.navigate('ProfileSwitchNavigator');
+        }
+        else{
+            this.props.navigation.navigate('Root');
+        }
     };
 
     render() {

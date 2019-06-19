@@ -182,7 +182,7 @@ export default class SaveProfileScreen extends React.Component {
                         this.props.navigation.goBack();
                     }
                     else {
-                        this.props.navigation.navigate('ProfileLoading');
+                        this.props.navigation.navigate('Root');
                     }
                 });
 
