@@ -12,7 +12,7 @@ export default {
     },
     logoContainer: {
         flex: 1,
-        marginTop: 30,
+        marginTop: 40,
         height: '40%',
         justifyContent: 'center',
         alignItems: 'center',

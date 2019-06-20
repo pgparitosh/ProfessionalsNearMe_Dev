@@ -1,7 +1,7 @@
 import React from 'react';
-import { Animated, Dimensions, Keyboard, UIManager, TextInput, View, KeyboardAvoidingView, ScrollView } from 'react-native';
-import { Appbar } from 'react-native-paper';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { Keyboard, View, KeyboardAvoidingView } from 'react-native';
+import { Appbar, Text } from 'react-native-paper';
+import { GiftedChat, Bubble, Send } from 'react-native-gifted-chat';
 
 
 export default class GiftedChatScreen extends React.Component {
@@ -27,9 +27,25 @@ export default class GiftedChatScreen extends React.Component {
                         avatar: "https://placeimg.com/140/140/any"
                     }
                 }
-            ]
+            ],
+            keyboardVisible: 0,
         });
+        this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+        this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
     }
+
+    componentWillUnmount() {
+        this.keyboardDidShowSub.remove();
+        this.keyboardDidHideSub.remove();
+    }
+
+    keyboardDidShow = (event) => {
+        this.setState({ keyboardVisible: true });
+    };
+
+    keyboardDidHide = (event) => {
+        this.setState({ keyboardVisible: false });
+    };
 
     _goBack() {
         this.props.navigation.goBack();
@@ -39,6 +55,19 @@ export default class GiftedChatScreen extends React.Component {
         this.setState(previousState => ({
             messages: GiftedChat.append(previousState.messages, messages)
         }));
+    }
+
+    renderBubble(props) {
+        return (
+            <Bubble
+                {...props}
+                wrapperStyle={{
+                    right: {
+                        backgroundColor: '#6200ee'
+                    }
+                }}
+            />
+        )
     }
 
     render() {
@@ -54,19 +83,21 @@ export default class GiftedChatScreen extends React.Component {
                     />
                 </Appbar.Header>
 
-                <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" enabled>
+                <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
                     <GiftedChat
-                        forceGetKeyboardHeight={true}
                         keyboardShouldPersistTaps={"always"}
                         messages={this.state.messages}
+                        placeholder='Type your message here'
                         onSend={messages => this.onSend(messages)}
                         user={{
                             _id: 1,
                             avatar: "https://placeimg.com/140/140/any",
                         }}
+                        renderBubble={this.renderBubble}
                     />
+                    <View style={{ height: this.state.keyboardVisible ? 60 : 0 }} />
                 </KeyboardAvoidingView>
-            </View>
+            </View >
         );
     }
 }
