@@ -1,6 +1,6 @@
 import React from 'react';
-import { Keyboard, View, KeyboardAvoidingView } from 'react-native';
-import { Appbar, Text } from 'react-native-paper';
+import { Keyboard, View, KeyboardAvoidingView, Platform } from 'react-native';
+import { Appbar } from 'react-native-paper';
 import { GiftedChat, Bubble, Send } from 'react-native-gifted-chat';
 
 
@@ -75,7 +75,7 @@ export default class GiftedChatScreen extends React.Component {
             <View style={{ flex: 1 }}>
                 <Appbar.Header>
                     <Appbar.BackAction
-                        onPress={this._goBack}
+                        onPress={this._goBack.bind(this)}
                     />
                     <Appbar.Content
                         title="John Doe"
@@ -83,20 +83,24 @@ export default class GiftedChatScreen extends React.Component {
                     />
                 </Appbar.Header>
 
-                <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
-                    <GiftedChat
-                        keyboardShouldPersistTaps={"always"}
-                        messages={this.state.messages}
-                        placeholder='Type your message here'
-                        onSend={messages => this.onSend(messages)}
-                        user={{
-                            _id: 1,
-                            avatar: "https://placeimg.com/140/140/any",
-                        }}
-                        renderBubble={this.renderBubble}
-                    />
-                    <View style={{ height: this.state.keyboardVisible ? 60 : 0 }} />
-                </KeyboardAvoidingView>
+                {/* <KeyboardAvoidingView behavior={'padding'} style={{flex:1}} keyboardVerticalOffset={Platform.OS !== 'ios'? 60 : 0}> */}
+                <GiftedChat
+                    // forceGetKeyboardHeight={true}
+                    // keyboardShouldPersistTaps={"always"}
+                    messages={this.state.messages}
+                    placeholder='Type your message here'
+                    onSend={messages => this.onSend(messages)}
+                    user={{
+                        _id: 1,
+                        avatar: "https://placeimg.com/140/140/any",
+                    }}
+                    renderBubble={this.renderBubble}
+                    forceGetKeyboardHeight={Platform.OS === 'ios'}
+                />
+                {/* <View style={{ height: this.state.keyboardVisible && Platform.OS !== 'ios' ? 60 : 0, flex: this.state.keyboardVisible ? 1 : 0 }} /> */}
+                {/* </KeyboardAvoidingView> */}
+                {Platform.OS === 'ios'? null : <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={60} />}
+                
             </View >
         );
     }
