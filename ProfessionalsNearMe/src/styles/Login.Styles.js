@@ -8,21 +8,16 @@ export default {
     },
     container: {
         flex: 1,
-        backgroundColor: '#2199ff',
     },
     logoContainer: {
         flex: 1,
         marginTop: 40,
-        height: '40%',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#2199ff',
     },
     contentContainer: {
-        flex: 1,
-        // backgroundColor: '#6200ee',
-        backgroundColor: '#2199ff',
-        paddingTop: 20,
+        flex: 2,
+        bottom: 0,
     },
     appName: {
         fontSize: 35,
@@ -48,6 +43,7 @@ export default {
         marginTop: 20,
         marginRight: 20,
         marginLeft: 20,
+        height: 60,
     },
     loginPageButton: {
         flex: 1,
@@ -62,7 +58,8 @@ export default {
         marginTop: 10,
     },
     signInContentContainer: {
-        marginTop: '30%',
+        marginTop: '40%',
+        backgroundColor: 'rgb(255, 0, 0, 0.5)',
     },
     forgotPasswordContainer: {
         marginTop: 20,

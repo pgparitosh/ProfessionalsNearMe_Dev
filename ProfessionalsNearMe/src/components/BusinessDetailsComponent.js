@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Picker, Button, Image } from 'react-native';
+import { View, Picker } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import { ImagePicker } from 'expo';
 import ProfileScreenStyles from '../styles/ProfileScreen.Styles';
 
 export default class BusinessDetailsComponent extends React.Component {
@@ -128,8 +127,10 @@ export default class BusinessDetailsComponent extends React.Component {
                     <TextInput
                         label='Description'
                         mode='flat'
+                        multiline={true}
                         placeholder='Describe your business'
                         style={ProfileScreenStyles.inputFields}
+                        numberOfLines={4}
                         value={this.state.description}
                         onChangeText={(description) => this.setState({ description })}
                         onBlur={this._handleTextChange.bind(this)}

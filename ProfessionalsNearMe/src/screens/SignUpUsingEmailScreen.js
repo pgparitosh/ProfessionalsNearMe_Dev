@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, ImageBackground, KeyboardAvoidingView } from 'react-native';
 import { Button, Text, Colors, TextInput, Snackbar } from 'react-native-paper';
 import LoginStyles from '../styles/Login.Styles';
 import LoginService from '../services/LoginService.js';
@@ -27,8 +27,8 @@ export default class ForgotPasswordScreen extends React.Component {
 
     _signUp() {
         this.setState(state => ({
-                isLoading: true,
-            })
+            isLoading: true,
+        })
         )
         var emailAddress = this.state.emailId;
         var password = this.state.pwd;
@@ -57,17 +57,17 @@ export default class ForgotPasswordScreen extends React.Component {
             console.log(JSON.stringify(inputObj));
             // var result = LoginService.signUpUsingEmail(JSON.stringify(inputObj));
             LoginService.signUpUsingEmail(inputObj)
-                        .then((res) => {
-                            console.log(res);
-                            this.props.navigation.navigate('AuthLoading');
-                        });
+                .then((res) => {
+                    console.log(res);
+                    this.props.navigation.navigate('AuthLoading');
+                });
             //msg = JSON.parse(result).message;
         }
         this.setState(state => ({
-                isLoading: false,
-                resultMsg: msg,
-                visible: true
-            })
+            isLoading: false,
+            resultMsg: msg,
+            visible: true
+        })
         );
     }
 
@@ -82,86 +82,87 @@ export default class ForgotPasswordScreen extends React.Component {
 
         return (
             <View style={LoginStyles.container}>
-                <View style={LoginStyles.signInContentContainer}>
-                    <Text style={LoginStyles.appName}>
-                        Sign Up
-                    </Text>
-                    <TextInput
-                        label='First Name'
-                        mode='flat'
-                        placeholder='Enter your first name'
-                        style={LoginStyles.inputFields}
-                        value={this.state.firstName}
-                        onChangeText={(firstName) => this.setState({ firstName })}
-                    />
-                    <TextInput
-                        label='Last Name'
-                        mode='flat'
-                        placeholder='Enter your last name'
-                        style={LoginStyles.inputFields}
-                        value={this.state.lastName}
-                        onChangeText={(lastName) => this.setState({ lastName })}
-                    />
-                    <TextInput
-                        label='Email'
-                        mode='flat'
-                        placeholder='Enter your registered Email Address'
-                        style={LoginStyles.inputFields}
-                        value={this.state.emailId}
-                        onChangeText={(emailId) => this.setState({ emailId })}
-                    />
-                    <TextInput
-                        label='Password'
-                        mode='flat'
-                        placeholder='Enter your password'
-                        secureTextEntry={true}
-                        style={LoginStyles.inputFields}
-                        value={this.state.pwd}
-                        onChangeText={(pwd) => this.setState({ pwd })}
-                    />
-                    <TextInput
-                        label='Comfirm Password'
-                        mode='flat'
-                        placeholder='Confirm your password'
-                        secureTextEntry={true}
-                        style={LoginStyles.inputFields}
-                        value={this.state.confPwd}
-                        onChangeText={(confPwd) => this.setState({ confPwd })}
-                    />
-                    <View style={LoginStyles.loginButtons}>
-                        <Button
-                            style={LoginStyles.loginPageButton}
-                            icon="assignment-turned-in"
-                            mode="contained"
-                            color={Colors.violet900}
-                            onPress={this._signUp.bind(this)}
-                        >
-                            Submit
-                        </Button>
-                        <Button
-                            style={LoginStyles.loginPageButton}
-                            icon="cancel"
-                            mode="contained"
-                            color={Colors.red500}
-                            onPress={() => this.props.navigation.navigate('Login')}
-                        >
-                            Cancel
-                        </Button>
-                    </View>
-                </View>
-                <Snackbar
-                    visible={this.state.visible}
-                    onDismiss={() => this.setState({ visible: false })}
-                    duration={10000}
-                    action={{
-                        label: 'Ok',
-                        onPress: () => {
-                            this.setState({ visible: false })
-                        },
-                    }}
-                >
-                    {this.state.resultMsg}
-                </Snackbar>
+                <ImageBackground source={require('../../assets/images/signup_back.jpg')} style={{ width: '100%', height: '100%', }}>
+                    <KeyboardAvoidingView behavior={'padding'} style={{ flex: 1 }} keyboardVerticalOffset={60}>
+                        <View style={LoginStyles.signInContentContainer}>
+                            <Text style={LoginStyles.appName}>
+                                Sign Up
+                            </Text>
+                            <TextInput
+                                label='First Name'
+                                mode='flat'
+                                placeholder='Enter your first name'
+                                style={LoginStyles.inputFields}
+                                value={this.state.firstName}
+                                onChangeText={(firstName) => this.setState({ firstName })}
+                            />
+                            <TextInput
+                                label='Last Name'
+                                mode='flat'
+                                placeholder='Enter your last name'
+                                style={LoginStyles.inputFields}
+                                value={this.state.lastName}
+                                onChangeText={(lastName) => this.setState({ lastName })}
+                            />
+                            <TextInput
+                                label='Email'
+                                mode='flat'
+                                placeholder='Enter your registered Email Address'
+                                style={LoginStyles.inputFields}
+                                value={this.state.emailId}
+                                onChangeText={(emailId) => this.setState({ emailId })}
+                            />
+                            <TextInput
+                                label='Password'
+                                mode='flat'
+                                placeholder='Enter your password'
+                                secureTextEntry={true}
+                                style={LoginStyles.inputFields}
+                                value={this.state.pwd}
+                                onChangeText={(pwd) => this.setState({ pwd })}
+                            />
+                            <TextInput
+                                label='Comfirm Password'
+                                mode='flat'
+                                placeholder='Confirm your password'
+                                secureTextEntry={true}
+                                style={LoginStyles.inputFields}
+                                value={this.state.confPwd}
+                                onChangeText={(confPwd) => this.setState({ confPwd })}
+                            />
+                            <View style={LoginStyles.loginButtons}>
+                                <Button
+                                    style={LoginStyles.loginPageButton}
+                                    icon="cancel"
+                                    mode="contained"
+                                    color={Colors.red500}
+                                    onPress={() => this.props.navigation.navigate('Login')}>
+                                    Cancel
+                                </Button>
+                                <Button
+                                    style={LoginStyles.loginPageButton}
+                                    icon="assignment-turned-in"
+                                    mode="contained"
+                                    color={Colors.violet900}
+                                    onPress={this._signUp.bind(this)}>
+                                    Submit
+                                </Button>
+                            </View>
+                        </View>
+                        <Snackbar
+                            visible={this.state.visible}
+                            onDismiss={() => this.setState({ visible: false })}
+                            duration={10000}
+                            action={{
+                                label: 'Ok',
+                                onPress: () => {
+                                    this.setState({ visible: false })
+                                },
+                            }}>
+                            {this.state.resultMsg}
+                        </Snackbar>
+                    </KeyboardAvoidingView>
+                </ImageBackground>
             </View>
         );
     }

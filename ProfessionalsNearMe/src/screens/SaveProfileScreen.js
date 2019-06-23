@@ -1,14 +1,12 @@
 import React from 'react';
-import { View, ScrollView, AsyncStorage } from 'react-native';
+import { View, ScrollView, AsyncStorage, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { Button, Headline, Appbar } from 'react-native-paper';
 import StepIndicator from 'react-native-step-indicator';
-import HeaderComponent from '../components/HeaderComponent';
 import ProfileScreenStyles from '../styles/ProfileScreen.Styles';
 import BasicDetailsComponent from '../components/BasicDetailsComponent';
 import BusinessDetailsComponent from '../components/BusinessDetailsComponent';
 import BusinessAddressDetailsComponent from '../components/BusinessAddressDetailsComponent';
 import PortfolioComponent from '../components/PortfolioDetailsComponent';
-import HelperService from '../services/HelperService';
 
 const customStyles = {
     stepIndicatorSize: 25,
@@ -76,7 +74,8 @@ export default class SaveProfileScreen extends React.Component {
         },
         portfolioDetails: {
             images: null,
-        }
+        },
+        keyboardVisible: false,
     }
 
     caller = '';
@@ -85,6 +84,24 @@ export default class SaveProfileScreen extends React.Component {
         super(props);
         this._save = this._save.bind(this);
     }
+
+    componentWillMount() {
+        this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+        this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+    }
+
+    componentWillUnmount() {
+        this.keyboardDidShowSub.remove();
+        this.keyboardDidHideSub.remove();
+    }
+
+    keyboardDidShow = (event) => {
+        this.setState({ keyboardVisible: true });
+    };
+
+    keyboardDidHide = (event) => {
+        this.setState({ keyboardVisible: false });
+    };
 
     componentDidMount() {
         const { navigation } = this.props;
@@ -268,25 +285,28 @@ export default class SaveProfileScreen extends React.Component {
                     />
                     <Headline style={ProfileScreenStyles.headline}>{this.state.headline}</Headline>
                 </View>
-                <ScrollView>
-                    <View style={[ProfileScreenStyles.inputContainer]}>
-                        <BasicDetailsComponent
-                            currentPosition={this.state.currentPosition}
-                            userData={this.state.userData}
-                            onNextClick={this._handleBasicDetails.bind(this)} />
-                        <BusinessDetailsComponent
-                            currentPosition={this.state.currentPosition}
-                            userData={this.state.businessDetails}
-                            onNextClick={this._handleBusinessDetails.bind(this)} />
-                        <BusinessAddressDetailsComponent
-                            currentPosition={this.state.currentPosition}
-                            userData={this.state.businessAddressDetails}
-                            onNextClick={this._handleBusinessAddressDetails.bind(this)} />
-                        <PortfolioComponent
-                            currentPosition={this.state.currentPosition}
-                            onNextClick={this._handlePortfolioDetails.bind(this)} />
-                    </View>
-                </ScrollView>
+                <KeyboardAvoidingView behavior={'padding'} style={{ flex: 1 }} keyboardVerticalOffset={60}>
+                    <ScrollView>
+                        <View style={[ProfileScreenStyles.inputContainer]}>
+                            <BasicDetailsComponent
+                                currentPosition={this.state.currentPosition}
+                                userData={this.state.userData}
+                                onNextClick={this._handleBasicDetails.bind(this)} />
+                            <BusinessDetailsComponent
+                                currentPosition={this.state.currentPosition}
+                                userData={this.state.businessDetails}
+                                onNextClick={this._handleBusinessDetails.bind(this)} />
+                            <BusinessAddressDetailsComponent
+                                currentPosition={this.state.currentPosition}
+                                userData={this.state.businessAddressDetails}
+                                onNextClick={this._handleBusinessAddressDetails.bind(this)} />
+                            <PortfolioComponent
+                                currentPosition={this.state.currentPosition}
+                                onNextClick={this._handlePortfolioDetails.bind(this)} />
+                        </View>
+                        {/* {this.state.keyboardVisible ? <View style={{ height: 60 }}></View> : null} */}
+                    </ScrollView>
+                </KeyboardAvoidingView>
                 <View style={ProfileScreenStyles.buttonAlignment}>
                     <Button mode="contained"
                         disabled={this.state.currentPosition === 0}

@@ -1,15 +1,21 @@
 import React from 'react';
-import { ScrollView, View, Picker, Slider } from 'react-native';
-import { Appbar, Headline, Text, Switch, Button } from 'react-native-paper';
+import { ScrollView, View, Picker, Slider, Platform } from 'react-native';
+import { Appbar, Headline, Text, Button } from 'react-native-paper';
 import ProfileScreenStyles from '../styles/ProfileScreen.Styles';
 import SearchStyles from '../styles/Search.Styles';
 import DatePicker from 'react-native-datepicker'
 import HelperService from '../services/HelperService';
+import { AdMobInterstitial } from "expo";
+import { INTERSTETIAL_ID_ANDROID, INTERSTETIAL_ID_IOS } from 'react-native-dotenv';
+
+const InterstetialId = Platform.OS === 'ios' ? INTERSTETIAL_ID_IOS : INTERSTETIAL_ID_ANDROID; 
 
 export default class SearchFilterScreen extends React.Component {
     constructor(props) {
         super(props);
     }
+
+    shouldLoadAds = true;
 
     state = {
         loadDefault: true,
@@ -37,6 +43,41 @@ export default class SearchFilterScreen extends React.Component {
             state: '',
             date: '',
         });
+
+        // Code for adMobs
+        if (this.shouldLoadAds) {
+            AdMobInterstitial.setTestDeviceID("EMULATOR");
+            // ALWAYS USE TEST ID for Admob ads
+            AdMobInterstitial.setAdUnitID(InterstetialId);
+            AdMobInterstitial.addEventListener("interstitialDidLoad", () =>
+                console.log("interstitialDidLoad")
+            );
+            AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () =>
+                console.log("interstitialDidFailToLoad")
+            );
+            AdMobInterstitial.addEventListener("interstitialDidOpen", () =>
+                console.log("interstitialDidOpen")
+            );
+            AdMobInterstitial.addEventListener("interstitialDidClose", () =>
+                console.log("interstitialDidClose")
+            );
+            AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
+                console.log("interstitialWillLeaveApplication")
+            );
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.shouldLoadAds) {
+            AdMobInterstitial.removeAllListeners();
+        }
+    }
+
+    async _showInterstitial() {
+        if (this.shouldLoadAds) {
+            await AdMobInterstitial.requestAdAsync();
+            await AdMobInterstitial.showAdAsync();
+        }
     }
 
     _goBack() {
@@ -50,6 +91,7 @@ export default class SearchFilterScreen extends React.Component {
     }
 
     _filterSearch() {
+        this._showInterstitial();
         var searhCriteria = this.getSearchCriteria(false);
         this.props.navigation.state.params.returnData(searhCriteria);
         this.props.navigation.navigate('SearchResults');

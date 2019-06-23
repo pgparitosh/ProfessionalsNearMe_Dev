@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, AsyncStorage } from 'react-native';
+import { View, AsyncStorage, ImageBackground } from 'react-native';
 import { Button, Text, Colors, TextInput, Snackbar } from 'react-native-paper';
 import LoginStyles from '../styles/Login.Styles';
 import LoginService from '../services/LoginService';
@@ -76,70 +76,72 @@ export default class SignInUsingEmailScreen extends React.Component {
     render() {
         return (
             <View style={LoginStyles.container}>
-                <View style={LoginStyles.signInContentContainer}>
-                    <Text style={LoginStyles.appName}>
-                        Login
-                    </Text>
-                    <TextInput
-                        label='Email'
-                        mode='flat'
-                        placeholder='Enter your registered Email Address'
-                        style={LoginStyles.inputFields}
-                        value={this.state.emailId}
-                        onChangeText={(emailId) => this.setState({ emailId })}
-                    />
-                    <TextInput
-                        label='Password'
-                        mode='flat'
-                        placeholder='Enter your password'
-                        secureTextEntry={true}
-                        style={LoginStyles.inputFields}
-                        value={this.state.pwd}
-                        onChangeText={(pwd) => this.setState({ pwd })}
-                    />
-                    <View style={LoginStyles.forgotPasswordContainer}>
-                        <Button
-                            onPress={this._forgotPassword.bind(this)}
-                            mode="text">
-                            <Text style={LoginStyles.forgotPasswordText}>
-                                Forgot Password?
+                <ImageBackground source={require('../../assets/images/signin_back.jpg')} style={{ width: '100%', height: '100%', }}>
+                    <View style={LoginStyles.signInContentContainer}>
+                        <Text style={LoginStyles.appName}>
+                            Login
+                        </Text>
+                        <TextInput
+                            label='Email'
+                            mode='flat'
+                            placeholder='Enter your registered Email Address'
+                            style={LoginStyles.inputFields}
+                            value={this.state.emailId}
+                            onChangeText={(emailId) => this.setState({ emailId })}
+                        />
+                        <TextInput
+                            label='Password'
+                            mode='flat'
+                            placeholder='Enter your password'
+                            secureTextEntry={true}
+                            style={LoginStyles.inputFields}
+                            value={this.state.pwd}
+                            onChangeText={(pwd) => this.setState({ pwd })}
+                        />
+                        <View style={LoginStyles.forgotPasswordContainer}>
+                            <Button
+                                onPress={this._forgotPassword.bind(this)}
+                                mode="text">
+                                <Text style={LoginStyles.forgotPasswordText}>
+                                    Forgot Password?
                             </Text>
+                            </Button>
+                        </View>
+                        <View style={LoginStyles.loginButtons}>
+                            <Button
+                                style={LoginStyles.loginPageButton}
+                                icon="cancel"
+                                mode="contained"
+                                color={Colors.red500}
+                                onPress={() => this.props.navigation.navigate('Login')}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                style={LoginStyles.loginPageButton}
+                                icon="mail"
+                                mode="contained"
+                                color={Colors.violet900}
+                                onPress={this._logIn.bind(this)}
+                            >
+                                Sign In
                         </Button>
+                        </View>
                     </View>
-                    <View style={LoginStyles.loginButtons}>
-                        <Button
-                            style={LoginStyles.loginPageButton}
-                            icon="mail"
-                            mode="contained"
-                            color={Colors.violet900}
-                            onPress={this._logIn.bind(this)}
-                        >
-                            Sign In
-                        </Button>
-                        <Button
-                            style={LoginStyles.loginPageButton}
-                            icon="cancel"
-                            mode="contained"
-                            color={Colors.red500}
-                            onPress={() => this.props.navigation.navigate('Login')}
-                        >
-                            Cancel
-                        </Button>
-                    </View>
-                </View>
-                <Snackbar
-                    visible={this.state.visible}
-                    onDismiss={() => this.setState({ visible: false })}
-                    duration={10000}
-                    action={{
-                        label: 'Ok',
-                        onPress: () => {
-                            this.setState({ visible: false })
-                        },
-                    }}
-                >
-                    {this.state.resultMsg}
-                </Snackbar>
+                    <Snackbar
+                        visible={this.state.visible}
+                        onDismiss={() => this.setState({ visible: false })}
+                        duration={10000}
+                        action={{
+                            label: 'Ok',
+                            onPress: () => {
+                                this.setState({ visible: false })
+                            },
+                        }}
+                    >
+                        {this.state.resultMsg}
+                    </Snackbar>
+                </ImageBackground>
             </View>
         );
     }

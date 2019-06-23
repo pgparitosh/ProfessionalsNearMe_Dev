@@ -11,19 +11,21 @@ import {
 import { Appbar, ActivityIndicator, Colors } from 'react-native-paper';
 import MapView from "react-native-maps";
 import Icon from "react-native-vector-icons/Ionicons";
+import { AdMobInterstitial } from "expo";
+import { INTERSTETIAL_ID_ANDROID, INTERSTETIAL_ID_IOS } from 'react-native-dotenv';
 
 const { height } = Dimensions.get("window");
 const MAP_HEIGHT = height * 0.75;
 const CARD_HEIGHT = height - MAP_HEIGHT - 20;
 const CARD_WIDTH = 250;
 const ACCENT_COLOUR = "#6200ee";
-
+const InterstetialId = Platform.OS === 'ios' ? INTERSTETIAL_ID_IOS : INTERSTETIAL_ID_ANDROID; 
 
 export default class SearchScreen extends React.Component {
     constructor(props) {
         super(props);
     }
-
+    shouldLoadAds = true;
     scrollerRef = null;
 
     state = {
@@ -121,6 +123,41 @@ export default class SearchScreen extends React.Component {
             (error) => this.setState({ error: error.message }),
             { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
         );
+
+        // Code for adMobs
+        if (this.shouldLoadAds) {
+            AdMobInterstitial.setTestDeviceID("EMULATOR");
+            // ALWAYS USE TEST ID for Admob ads
+            AdMobInterstitial.setAdUnitID(InterstetialId);
+            AdMobInterstitial.addEventListener("interstitialDidLoad", () =>
+                console.log("interstitialDidLoad")
+            );
+            AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () =>
+                console.log("interstitialDidFailToLoad")
+            );
+            AdMobInterstitial.addEventListener("interstitialDidOpen", () =>
+                console.log("interstitialDidOpen")
+            );
+            AdMobInterstitial.addEventListener("interstitialDidClose", () =>
+                console.log("interstitialDidClose")
+            );
+            AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
+                console.log("interstitialWillLeaveApplication")
+            );
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.shouldLoadAds) {
+            AdMobInterstitial.removeAllListeners();
+        }
+    }
+
+    async _showInterstitial() {
+        if (this.shouldLoadAds) {
+            await AdMobInterstitial.requestAdAsync();
+            await AdMobInterstitial.showAdAsync();
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -137,10 +174,12 @@ export default class SearchScreen extends React.Component {
     }
 
     _filterSearch() {
+        this._showInterstitial();
         this.props.navigation.navigate('SearchFilter', { returnData: this.returnData.bind(this) });
     }
 
     _showProfile(property) {
+        this._showInterstitial();
         this.props.navigation.navigate('ViewProfessional', { profileId: property.id });
     }
 

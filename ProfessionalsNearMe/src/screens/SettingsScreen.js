@@ -103,7 +103,7 @@ export default class SettingsScreen extends React.Component {
     }
 
     _showPrivacySettings() {
-        console.log("pressed")
+        console.log("pressed");
     }
 
     _showPrivacyPolicy() {
